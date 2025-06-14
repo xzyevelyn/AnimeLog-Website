@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AnimeLog Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="https://www.svgrepo.com/show/419503/anime-and-manga.svg" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: white;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .anime-section {
+            flex: 2;
+            padding: 2rem;
+        }
+
+        .anime-section h1 {
+            color: #ff4c60;
+            margin-bottom: 1.5rem;
+        }
+
+        .anime-card {
+            background: #121212;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(255, 76, 96, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .anime-card button {
+            background: #ff4c60;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            color: white;
+        }
+
+        .anime-card button:hover {
+            background: #e03e50;
+        }
+
+        .saved-list {
+            flex: 1;
+            background: #1a1a1a;
+            padding: 2rem;
+            border-left: 2px solid #ff4c60;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .saved-list h2 {
+            color: #ff4c60;
+            margin-bottom: 1rem;
+        }
+
+        .saved-list ul {
+            list-style: none;
+        }
+
+        .saved-list li {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: #222;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .saved-list li button {
+            background: #ff4c60;
+            color: #ffffff;
+            border: none;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .saved-list li button:hover {
+            background: #e03e50;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="anime-section">
+        <h1>Anime List</h1>
+        <div class="anime-card">
+            <span>Solo Leveling</span>
+            <button onclick="addToList('Solo Leveling')">Add to List</button>
+        </div>
+        <div class="anime-card">
+            <span>Demon Slayer</span>
+            <button onclick="addToList('Demon Slayer')">Add to List</button>
+        </div>
+        <div class="anime-card">
+            <span>Attack on Titan</span>
+            <button onclick="addToList('Attack on Titan')">Add to List</button>
+        </div>
+        <div class="anime-card">
+            <span>Naruto</span>
+            <button onclick="addToList('Naruto')">Add to List</button>
+        </div>
+        <div class="anime-card">
+            <span>Jujutsu Kaisen</span>
+            <button onclick="addToList('Jujutsu Kaisen')">Add to List</button>
+        </div>
+        <div class="anime-card">
+            <span>Friren</span>
+            <button onclick="addToList('Friren:Beyond the journeys end')">Add to List</button>
+        </div>
+    </div>
+
+    <aside class="saved-list">
+        <h2>My Anime List</h2>
+        <ul id="animeListUl">
+        </ul>
+    </aside>
+
+    <script>
+        const animeListUl = document.getElementById("animeListUl");
+
+        function loadList() {
+            const saved = JSON.parse(localStorage.getItem("animeList")) || [];
+
+            animeListUl.innerHTML = '';
+            saved.forEach(title => {
+                const li = document.createElement('li');
+                li.textContent = title;
+
+                const button = document.createElement('button');
+                button.textContent = "Unlist";
+                button.onclick = () => unlist(title);
+                li.appendChild(button);
+
+                animeListUl.appendChild(li);
+            });
+        }
+
+        function addToList(title) {
+            let saved = JSON.parse(localStorage.getItem("animeList")) || [];
+
+            if (!saved.includes(title)) {
+                saved.push(title);
+                localStorage.setItem("animeList", JSON.stringify(saved));
+                loadList();
+            }
+        }
+
+        function unlist(title) {
+            let saved = JSON.parse(localStorage.getItem("animeList")) || [];
+
+            saved = saved.filter(item => item !== title);
+            localStorage.setItem("animeList", JSON.stringify(saved));
+            loadList();
+        }
+
+        window.onload = loadList;
+    </script>
+
+</body>
+
+</html>
